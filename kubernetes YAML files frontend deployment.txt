@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mfa-frontend
+  namespace: mfa-system
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mfa-frontend
+  template:
+    metadata:
+      labels:
+        app: mfa-frontend
+    spec:
+      containers:
+        - name: mfa-frontend
+          image: your-dockerhub-username/mfa-frontend:latest
+          ports:
+            - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mfa-frontend
+  namespace: mfa-system
+spec:
+  type: LoadBalancer
+  selector:
+    app: mfa-frontend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
